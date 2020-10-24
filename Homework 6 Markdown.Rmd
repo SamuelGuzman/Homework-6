@@ -1,0 +1,306 @@
+---
+title: "Homework 6 Markdown"
+author: "Samuel Guzman"
+date: "10/19/2020"
+output: html_document
+---
+
+0. Go through the faded examples in the lab. You don’t need to put the output here - just, do them! And let us know if you have any remaining questions, or you feel comfortable. Full credit!
+
+I am not going to put this in a code box, because I would need to include the files (or else it produces an error). However, here is my completed faded examples.
+
+#FADED EXAMPLES
+
+#1.
+
+#load the data
+
+fat <- read.csv("Data/17q04BodyFatHeatLoss Sloan and Keatinge 1973 replica.csv")
+
+#initial visualization to determine if lm is appropriate
+
+fat_plot <- ggplot(data = fat, aes(x = leanness, y = lossrate)) +
+  geom_point()
+fat_plot
+
+fat_mod <- lm(lossrate ~ leanness, data = fat)
+
+#assumptions
+
+simulate(fat_mod, nsim = 100) %>%
+  pivot_longer(cols = everything(),
+               names_to = "sim", values_to = "lossrate") %>%
+  ggplot(aes(x = lossrate)) +
+  geom_density(aes(group = sim), size = 0.2) +
+  geom_density(data = fat, color = "blue", size = 2)
+
+plot(fat_mod, which = 1)
+plot(fat_mod, which = 2)
+
+#f-test of model
+
+anova(fat_mod)
+
+#t-tests of parameters
+
+summary(fat_mod)
+
+#plot with line
+
+fat_plot +
+  stat_smooth(method = lm, formula = y~x)
+
+
+#2.
+
+deet <- read.csv("Data/17q24DEETMosquiteBites.csv")
+
+deet_plot <- ggplot(data = deet, aes(x = dose, y = bites)) +
+  geom_point()
+
+deet_plot
+
+deet_mod <- lm(bites ~ dose, data = deet)
+
+#assumptions
+
+simulate(deet_mod, nsim = 100) %>%
+  pivot_longer(cols = everything(),
+               names_to = "sim", values_to = "bites") %>%
+  ggplot(aes(x = bites)) +
+  geom_density(aes(group = sim), lwd = 0.2) +
+  geom_density(data = deet, color = "blue", lwd = 2)
+
+plot(deet_mod, which = 1)
+plot(deet_mod, which = 2)
+
+#f-tests of model
+
+anova(deet_mod)
+
+#t- tests of parameters
+
+summary(deet_mod)
+
+#plot with line
+
+deet_plot +
+  stat_smooth(method = lm, formula = y~x)
+
+#3.
+
+  zoo <- read.csv("Data/17q02ZooMortality Clubb and Mason 2003 replica.csv")
+
+zoo_plot <- ggplot(data=zoo, aes(x=mortality, y=homerange)) + 
+  geom_point()
+
+zoo_plot
+
+
+zoo_mod <- lm(mortality, data=homerange)
+
+#assumptions
+
+simulate(zoo_mod, nsim = 100) %>%
+  pivot_longer(cols = everything(), 
+      names_to = "sim", values_to = "mortality") %>%
+  ggplot(aes(x = mortality)) +
+  geom_density(aes(group = sim), lwd = 0.2) +
+  geom_density(data = zoo, color = "blue", lwd = 2)
+
+plot(zoo_mod, which=1)
+plot(zoo_mod, which=2)
+
+#f-tests of model
+
+anova(zoo_mod)
+
+#t-tests of parameters
+
+summary(zoo_mod)
+
+#plot with line
+
+zoo_plot + 
+  stat_smooth(method=lm, formula=y~x)
+
+1. Would you say you naturally gravitate towards deductive or inductive inference? Why? 
+
+I naturally gravitate more towards deductive reasoning. I think deductive reasoning often provides greater certainty in one's conclusions. I would also argue that inductive reasoning is at least sometimes underlaid by deductive reasoning. For example, if a person collects evidence that supports a claim, it is also true that the evidence may contradict alternative claims. For instance, if I am observing a flamingo, and the bird is pink, then while this is evidence that it is a flamingo, it also contradicts that it is a penguin, or a pigeon, or a bluebird. Further, it is often said that "the greater the evidence, the more likely a claim is to be true". I would argue that the claim is warranted, but the underlying reason why is because more and more alternative claims are contradicted by the ever mounting evidence. So, in that case, inductive inference is not as distinct as it appears. That being said, I would follow this up with the disclaimer that I don't really have a great understanding of inductive inference.
+
+2. We talked about strictly interpreted Popperian Falsification versus Lakatos’s view of a research program this week.
+
+2a. Do you more strongly identify with one of these paradigms? Why? +1 EC for direct quotes (if you want to do some additional reading)
+
+I agree with Popper's paradigm, because I like the falsification model. I agree with the idea that things cannot be proven true (in a direct sense) but can be falsified. However, I am not so sure that the two paradigms are necessarily competing/contradictory paradigms. For instance, on this page:
+
+http://people.loyno.edu/~folse/Lakatos.html
+
+The writer claims, "He [Lakatos] sets out to build a theory of the rationality of the growth of scientific belief over time which remained true to Popper's falsificationist views but admitted the hisotrical evidence that Kuhn had presented to show that scientists do not abadon theories when confronted by so-called 'counterinstances.'"
+
+I would place emphasis on the words "remained true to Popper's falsificationist views". This tells us that Lakatos did not reject Popper's falsificationist paradigm.
+
+To answer the question, though, I think that Lakatos paradigm is a beneficial addition. I think that Lakatos paradigm is more complete (so I would more strongly identify with that one) but I still view Popper's view as justified.
+
+Regarding the image, the center bubble says "Hard Core Theory". This quote seems relevant.
+
+"When refuting evidence is encountered, according to the Lakatosian picture, the scientist will not consider the programme as "refuted."  Instead he/she will begin to alter the assumptions of the "protective belt" in ways premitted or suggested by the positive heuristic, such that the "hard core" of the programme can be retained unscathed.".
+
+There is a hard core theory which exists and is not dismissed immediately upon refuting evidence. Instead, the protective belt is subject to change. Though I may not understand correctly, I think rejecting the hard core theory is still possible but is a larger endeavor.
+
+For the EC, I am not sure if the above quotes count as direct, because it is not Lakatos' direct quotation. Here is something he actually said:
+
+"The positive heuristic of the programme saves the scientist from becoming confused by the ocean of anomalies."
+
+He is talking about how a single counter-example does not refute a theory. His paradigm presents a picture of how that view could work.
+
+https://www.brainyquote.com/quotes/imre_lakatos_310430
+
+2b. How does your own research program fit into one of these paradigms?
+
+The research that I am doing for my master's program is closer to engineering than to science. Making discoveries is not the main goal, though science is often involved. My research is about developing a flood-mitigation solution for a location in Boston that is susceptible to flooding. For various aspects, science is involved. For instance, it requires an understanding of historical precipitation in Massachusetts, with the assumption that the future is at least somewhat similar to the historical data. While I could be wrong, I think this falls into the domain of inductive inference. Another aspect of my project may involve developing an understanding of how contaminants in water infiltrate into soil. For my research,  it could be "good" if smaller-sized contaminants are able to infiltrate into soil even if larger-sized contaminants are not, because risk to humans (who exist above the ground-atmosphere interface, obviously) is negated. Thus, an experiment could involve determining if contaminant-size is related to infiltration ability of the contaminant. Similar to Popper's paradigm, this involves a prediction as well as observations to see if a prediction is false. For instance, one could predict that size makes no difference in infiltration ability, and check if observations (for instance, contaminant in effluent) match that prediction. If they don't, then the prediction "makes no difference in infiltration ability" is false, so there is a difference.
+
+3. Grid Sampling! Based on Friday’s lab, load up the pufferfish data and use grid sampling to find the MLE of the slope, intercept and residual SD of this model. Feel free to eyeball results from an lm() fit to get reasonable values. Try not to do this for a grid of more than ~100K points (more if you want!). It’s ok to be coarse. Compare to lm.
+
+```{r first_chunk}
+
+# Load the data
+
+pufferfish <- read.csv("16q11PufferfishMimicry_Caley_&_Schluter_2003.csv")
+
+# View the data in a graph, with an lm() fit, to get reasonable estimate ranges
+
+library(ggplot2)
+
+int_and_slope_pufferfish <- lm(data = pufferfish, predators~resemblance) #get intercept and slope
+
+pen_plot_base_Q3 <- ggplot(data = pufferfish,
+                        mapping = aes(x = resemblance,
+                                      y = predators))
+
+pen_plot_base_Q3 +
+  geom_point(size = 3,
+             color = "blue") + 
+  geom_line(fortify(int_and_slope_pufferfish), mapping = aes(x = resemblance, y = .fitted))
+
+# From the graph, the intercept looks to be about 4. However, for intercept ranges I will be a bit more generous and say it is between 2 and 6. The slope looks to be about 3, but I will say it is between 1 and 5. For "residual SD", I think this is referring to the residuals in units of SD, so I will first calculate the sd. The sd is 4.71. The residuals appear to be between 0.5 and 1.5 SD.
+
+# Likelihood function
+
+norm_likelihood <- function(slope_est, intercept_est, residual_sd_est){
+  puffers_data_new <- slope_est - intercept_est * pufferfish[,2]
+  sum(dnorm(pufferfish[,2], puffers_data_new, residual_sd_est, log = TRUE))
+}
+
+# Using crossing in tidyr
+library(dplyr) #dplyr and tidyr are needed/helpful
+library(tidyr)
+
+puffer_dist <- crossing(slo = seq(1, 5, by = 0.1), 
+                      interc = seq(2, 6, by = 0.1),
+                      residu = seq(0.5, 1.5, by = 0.1)) %>%
+  rowwise() %>%
+  mutate(log_lik = norm_likelihood(slo, interc, residu)) %>% 
+ ungroup()
+
+# Get the MLE
+puffer_dist %>%
+  filter(log_lik == max(log_lik))
+
+# Compare with lm.
+
+int_and_slope_pufferfish
+
+```
+
+Comparison with lm().
+
+The intercept according to lm() is 1.925. The intercept MLE is 2, which is not far off. The slope according to lm() is 2.989. The slope MLE is 5. This is somewhat different from lm().
+
+4. Surfaces! Filter the dataset to the MLE of the SD. Plot the surface for the slope and intercept in whatever way you find most compelling. You might want to play around with zooming in to different regions, etc. Have fun!
+
+The surface as shown with filled contours.
+
+```{r second_chunk}
+
+# Filter the dataset to the MLE of the Residual SD 
+# (I am assuming the question meant the residual SD, not "SD")
+
+filter_to_mle <- puffer_dist %>%
+                 filter(log_lik == max(log_lik))
+
+res_sd <- filter_to_mle$residu #residual sd
+
+# Plot the surface for the slope and intercept.
+
+ggplot(data = puffer_dist, mapping = aes(slo, interc, z = residu)) +
+  stat_density2d(aes(fill = ..level..), geom = "polygon") +
+  coord_cartesian(ylim = c(0, 7), xlim = c(0,7))
+
+ggplot(data = puffer_dist, mapping = aes(slo, interc, z = residu)) +
+  stat_density2d(aes(fill = ..level..), geom = "polygon") +
+  coord_cartesian(ylim = c(2.0, 3.0), xlim = c(4.0,5.0))
+
+```
+
+A dark color is assosiated with the smallest level, and that seems to occur in the edges and also corners.
+
+5. GLM! Now, compare those results to results from glm. Show the profiles and confidence intervals from glm() for the slope and intercept. Also show how you validate assumptions.
+
+```{r third_chunk}
+pufferfish <- read.csv("16q11PufferfishMimicry_Caley_&_Schluter_2003.csv")
+
+puffers_mle <- glm(predators~resemblance,
+                family = gaussian(link = "identity"),
+                data = pufferfish)
+
+puffers_mle
+```
+
+According to GLM, the intercept is 1.925 and the slope is 2.989. These are exactly the same values that were determined from lm(). The intercept from my MLE is 2, which is not far off. The slope MLE is 5. This is somewhat different from GLM and lm().
+
+```{r fourth_chunk}
+# Viewing the profile
+
+library(MASS)
+plot(profile(puffers_mle))
+
+# Observing the CIs
+
+library(profileModel)
+
+prof <- profileModel(puffers_mle,
+                     objective = "ordinaryDeviance")
+
+plot(prof)
+
+# Validating Assumptions
+# The assumptions are:
+# 1. "No relationship between fitted and residual values"
+# 2. "Residuals follow normal distribution"
+# 3. "The surface is peaked approximately symetrically"
+
+# Assumption 1 can be assessed using a plot of fitted and residuals
+library(ggplot2)
+
+fitted <- predict(puffers_mle)
+res <- residuals(puffers_mle)
+
+qplot(fitted, res)
+
+# There does not appear to be a relationship between fitted and residual values. This satisfies the first assumption.
+
+# Assumptions 2 and 3 can be assessed with a histogram.
+
+hist(res)
+
+# Regarding, "Residuals follow normal distribution"...
+# The histogram data is close to a normal distribution. It may be slightly weighted to the left side.
+# I will say that the second assumption is met, though I am unsure.
+
+# The third assumption is "The surface is peaked approximately symetrically".
+# Strictly speaking, it is not true that it is peaked symetrically. The word "approximately" was used, so I don't think it has to be perfectly symmetric. Because of this, I will say the third assumption is met.
+
+# In conclusion, all assumptions are met.
+
+```
